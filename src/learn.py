@@ -32,16 +32,18 @@ num_classes = y_train.shape[1]
 print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
 print('num_pixels', num_pixels, 'num_classes', num_classes)
 
-#______________________________________ model
-model = Sequential()
-model.add(Dense(num_pixels, input_dim=num_pixels, kernel_initializer='normal', activation='relu'))
-model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+for size in [1000, 2000, 5000]:
+    #______________________________________ model
+    model = Sequential()
+    model.add(Dense(size, input_dim=num_pixels, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-#______________________________________ train
-model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=10, batch_size=200, verbose=2)
+    #______________________________________ train
+    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=10, batch_size=50, verbose=0)
 
-#______________________________________ evalute model
-scores = model.evaluate(x_test, y_test, verbose=0)
-print("Baseline Error: %.2f%%" % (100 - scores[1] * 100))
+    #______________________________________ evalute model
+    scores = model.evaluate(x_test, y_test, verbose=0)
+    # print("Baseline Error: %.2f%%" % (100 - scores[1] * 100))
+    print('{}: {:0.2f}%'.format(size, 100 - scores[1] * 100))
 
